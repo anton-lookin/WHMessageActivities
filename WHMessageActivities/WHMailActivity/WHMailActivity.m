@@ -43,6 +43,10 @@
 
 #pragma mark - UIActivity Overrides
 
++ (UIActivityCategory)activityCategory {
+	return UIActivityCategoryShare;
+}
+
 - (NSString *)activityType {
     return NSStringFromClass([self class]);
 }
@@ -52,7 +56,7 @@
 }
 
 - (UIImage *)activityImage {
-    return [UIImage imageNamed:@"mailActivity.png"];
+    return [UIImage imageNamed:@"MailActivity.png"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
@@ -78,22 +82,27 @@
 }
 
 - (UIViewController *)activityViewController {
-    MFMailComposeViewController *composeController = [[MFMailComposeViewController alloc] init];
-
+    MFMailComposeViewController *mailComposeViewController = [[MFMailComposeViewController alloc] init];
+	
+	NSShadow *shadow = [[NSShadow alloc] init];
+	shadow.shadowOffset = CGSizeZero;
+	shadow.shadowColor = [UIColor clearColor];
+	mailComposeViewController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UINavigationBar appearance].titleTextAttributes[NSForegroundColorAttributeName], NSShadowAttributeName : shadow};
+	mailComposeViewController.navigationBar.tintColor = [UINavigationBar appearance].titleTextAttributes[NSForegroundColorAttributeName];
     if (self.activityItem.onMailActivitySelected) {
-        self.activityItem.onMailActivitySelected(composeController);
+        self.activityItem.onMailActivitySelected(mailComposeViewController);
     }
 
-    composeController.mailComposeDelegate = self;
-	self.mailController = composeController;
-    return composeController;
+    mailComposeViewController.mailComposeDelegate = self;
+	self.mailController = mailComposeViewController;
+    return mailComposeViewController;
 }
 
 #pragma mark - MFMailComposeViewControllerDelegate
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     [self activityDidFinish:result == MFMailComposeResultSent];
-	[self.mailController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+	[self.mailController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
