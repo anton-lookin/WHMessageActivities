@@ -15,6 +15,6 @@
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "WHMessageActivities/WHMailActivity/*.{h,m}"
+  "source_files": "WHMessageActivities/WHMailActivity/*.{h,m}",
   "requires_arc": true
 }
