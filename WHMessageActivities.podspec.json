@@ -1,0 +1,20 @@
+{
+  "name": "WHMessageActivities",
+  "version": "1.0",
+  "source": {
+    "git": "https://github.com/VladKorzun/IQKeyboardManager.git",
+    "branch": "master"
+  },
+  "summary": "",
+  "homepage": "",
+  "screenshots": "",
+  "license": "MIT",
+  "authors": {
+    "Wayne Hartman": "WayneHartman@gmail.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "WHMessageActivities/WHMailActivity/*.{h,m}"
+  "requires_arc": true
+}
