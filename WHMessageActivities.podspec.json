@@ -1,0 +1,21 @@
+{
+  "name": "WHMessageActivities",
+  "version": "1.0",
+  "source": {
+    "git": "https://github.com/VladKorzun/IQKeyboardManager.git",
+    "branch": "master",
+    "tag": "1.0"
+  },
+  "summary": "UIActivity subclasses for direct customization of MessageUI controllers.",
+  "homepage": "http://https://github.com/waynehartman/WHMessageActivities",
+  "screenshots": "",
+  "license": "MIT",
+  "authors": {
+    "Wayne Hartman": "WayneHartman@gmail.com"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "WHMessageActivities/WHMailActivity/*.{h,m}",
+  "requires_arc": true
+}
