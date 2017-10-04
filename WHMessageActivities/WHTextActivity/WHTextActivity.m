@@ -39,6 +39,10 @@
 
 #pragma mark - UIActivity Overrides
 
++ (UIActivityCategory)activityCategory {
+	return UIActivityCategoryShare;
+}
+
 - (NSString *)activityType {
     return NSStringFromClass([self class]);
 }
@@ -48,7 +52,7 @@
 }
 
 - (UIImage *)activityImage {
-    return [UIImage imageNamed:@"textActivity.png"];
+    return [UIImage imageNamed:@"TextActivity.png"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
@@ -75,7 +79,12 @@
 
 - (UIViewController *)activityViewController {
     MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
-
+	
+	NSShadow *shadow = [[NSShadow alloc] init];
+	shadow.shadowOffset = CGSizeZero;
+	shadow.shadowColor = [UIColor clearColor];
+	messageController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UINavigationBar appearance].titleTextAttributes[NSForegroundColorAttributeName], NSShadowAttributeName : shadow};
+	messageController.navigationBar.tintColor = [UINavigationBar appearance].titleTextAttributes[NSForegroundColorAttributeName];
     if (self.textActivityItem.onTextActivitySelected) {
         self.textActivityItem.onTextActivitySelected(messageController);
     }
