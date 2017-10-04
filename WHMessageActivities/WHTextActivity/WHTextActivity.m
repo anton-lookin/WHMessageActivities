@@ -32,6 +32,8 @@
 @interface WHTextActivity () <MFMessageComposeViewControllerDelegate>
 
 @property (nonatomic, strong) WHTextActivityItem *textActivityItem;
+@property (nonatomic, copy) NSDictionary *navigationBarTitleTextAttributes;
+@property (nonatomic, copy) NSDictionary *barButtonItemTitleTextAttributes;
 
 @end
 
@@ -44,60 +46,64 @@
 }
 
 - (NSString *)activityType {
-    return NSStringFromClass([self class]);
+	return NSStringFromClass([self class]);
 }
 
 - (NSString *)activityTitle {
-    return NSLocalizedString(@"Message", @"title for iMessage activity");
+	return NSLocalizedString(@"Message", @"title for iMessage activity");
 }
 
 - (UIImage *)activityImage {
-    return [UIImage imageNamed:@"TextActivity.png"];
+	return [UIImage imageNamed:@"TextActivity.png"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
-    if (![MFMessageComposeViewController canSendText]) {
-        return NO;
-    }
-
-    for (id item in activityItems) {
-        if ([WHTextActivityItem class]) {
-            return YES;
-        }
-    }
-
-    return NO;
+	if (![MFMessageComposeViewController canSendText]) {
+		return NO;
+	}
+	
+	for (id item in activityItems) {
+		if ([item isKindOfClass:[WHTextActivityItem class]]) {
+			return YES;
+		}
+	}
+	
+	return NO;
 }
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
-    for (id item in activityItems) {
-        if ([item isKindOfClass:[WHTextActivityItem class]]) {
-            self.textActivityItem = item;
-        }
-    }
+	for (id item in activityItems) {
+		if ([item isKindOfClass:[WHTextActivityItem class]]) {
+			self.textActivityItem = item;
+		}
+	}
 }
 
 - (UIViewController *)activityViewController {
-    MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+	self.navigationBarTitleTextAttributes = [[UINavigationBar appearance] titleTextAttributes];
+	self.barButtonItemTitleTextAttributes = [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] titleTextAttributesForState:UIControlStateNormal];
+	[[UINavigationBar appearance] setTitleTextAttributes: @{NSForegroundColorAttributeName : [UIColor blackColor]}];
+	[[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithRed:14.0/255 green:122.0/255 blue:254.0/255 alpha:1.0]} forState:UIControlStateNormal];
 	
-	NSShadow *shadow = [[NSShadow alloc] init];
-	shadow.shadowOffset = CGSizeZero;
-	shadow.shadowColor = [UIColor clearColor];
-	messageController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UINavigationBar appearance].titleTextAttributes[NSForegroundColorAttributeName], NSShadowAttributeName : shadow};
-	messageController.navigationBar.tintColor = [UINavigationBar appearance].titleTextAttributes[NSForegroundColorAttributeName];
-    if (self.textActivityItem.onTextActivitySelected) {
-        self.textActivityItem.onTextActivitySelected(messageController);
-    }
-
-    messageController.messageComposeDelegate = self;
-    return messageController;
+	MFMessageComposeViewController *messageController = [[MFMessageComposeViewController alloc] init];
+	
+	if (self.textActivityItem.onTextActivitySelected) {
+		self.textActivityItem.onTextActivitySelected(messageController);
+	}
+	
+	messageController.messageComposeDelegate = self;
+	return messageController;
 }
 
 #pragma mark - MFMessageComposeViewControllerDelegate
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
-    [self activityDidFinish:result == MessageComposeResultSent];
+	[[UINavigationBar appearance] setTitleTextAttributes: self.navigationBarTitleTextAttributes];
+	[[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:self.barButtonItemTitleTextAttributes forState:UIControlStateNormal];
+	
+	[self activityDidFinish:result == MessageComposeResultSent];
 }
 
 
 @end
+
