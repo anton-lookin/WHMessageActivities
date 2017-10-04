@@ -56,7 +56,7 @@
 }
 
 - (UIImage *)activityImage {
-    return [UIImage imageNamed:@"MailActivity.png"];
+    return [UIImage imageNamed:@"MailActivity"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {

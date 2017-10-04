@@ -54,7 +54,7 @@
 }
 
 - (UIImage *)activityImage {
-	return [UIImage imageNamed:@"TextActivity.png"];
+	return [UIImage imageNamed:@"TextActivity"];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems {
